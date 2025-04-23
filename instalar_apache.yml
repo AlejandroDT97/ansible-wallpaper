@@ -1,0 +1,9 @@
+- name: Instalar Apache en pcs de casa
+  hosts: casa
+  become: yes
+  tasks:
+    - name: Instalar apache2
+      apt:
+        name: apache2
+        state: present
+        update_cache: yes
