@@ -1,15 +1,19 @@
 ---
 - name: Cambiar fondo de pantalla con Ansible
   hosts: localhost
+  become: yes
   tasks:
     - name: Copiar script para cambiar el fondo
+      become: yes
       copy:
         src: set-wallpaper.sh
         dest: /usr/local/bin/set-wallpaper.sh
         mode: '0755'
 
     - name: Añadir comando al arranque del sistema
+      become: yes
       lineinfile:
-        path: ~/.profile
+        path: /home/{{ ansible_user_id }}/.profile
         line: "/usr/local/bin/set-wallpaper.sh"
         create: yes
+        insertafter: EOF
