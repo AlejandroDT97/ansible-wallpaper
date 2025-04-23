@@ -4,16 +4,23 @@
   become: yes
   tasks:
     - name: Copiar script para cambiar el fondo
-      become: yes
       copy:
         src: set-wallpaper.sh
         dest: /usr/local/bin/set-wallpaper.sh
         mode: '0755'
 
-    - name: Añadir comando al arranque del sistema
-      become: yes
-      lineinfile:
-        path: /home/{{ ansible_user_id }}/.profile
-        line: "/usr/local/bin/set-wallpaper.sh"
-        create: yes
-        insertafter: EOF
+    - name: Crear carpeta autostart si no existe
+      file:
+        path: /home/{{ ansible_user_id }}/.config/autostart
+        state: directory
+        mode: '0755'
+        owner: "{{ ansible_user_id }}"
+        group: "{{ ansible_user_id }}"
+
+    - name: Copiar archivo .desktop para autostart
+      copy:
+        src: wallpaper.desktop
+        dest: /home/{{ ansible_user_id }}/.config/autostart/wallpaper.desktop
+        mode: '0644'
+        owner: "{{ ansible_user_id }}"
+        group: "{{ ansible_user_id }}"
